@@ -21,7 +21,7 @@ public class Bird : MonoBehaviour
 
     public void Init(GameManager _gm)
     {
-        // mygameManager = _gm;
+        mygameManager = _gm;
     }
 
     private void ResetValues()
