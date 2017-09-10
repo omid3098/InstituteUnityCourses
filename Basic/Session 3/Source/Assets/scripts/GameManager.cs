@@ -8,11 +8,20 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private ObstacleManager obstacleManager;
 
-    private GameObject birdGo;
+    private Bird bird;
     private void Awake()
     {
-        birdGo = Instantiate(birdPrefab);
-        birdGo.transform.SetParent(transform, false);
-        obstacleManager.StartBuild();
+        var birdGo = Instantiate(birdPrefab);
+        bird = birdGo.GetComponent<Bird>();
+        bird.Init(this);
+        bird.transform.SetParent(transform, false);
+        obstacleManager.Init();
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("Game Over");
+        bird.Stop();
+        obstacleManager.Stop();
     }
 }

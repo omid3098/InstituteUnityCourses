@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Obstacle : MonoBehaviour
 {
@@ -8,5 +9,10 @@ public class Obstacle : MonoBehaviour
     void Update()
     {
         transform.position += new Vector3(-speed, 0, 0);
+    }
+
+    public void Stop()
+    {
+        speed = 0;
     }
 }
