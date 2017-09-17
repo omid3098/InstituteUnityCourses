@@ -1,18 +1,21 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-
-public class Obstacle : MonoBehaviour
+﻿namespace FlappyBird
 {
-    [SerializeField]
-    private float speed;
-    void Update()
-    {
-        transform.position += new Vector3(-speed, 0, 0);
-    }
+    using UnityEngine;
+    using System.Collections;
+    using System;
 
-    public void Stop()
+    public class Obstacle : MovableObjects
     {
-        speed = 0;
+        public override void UpdatePosition(Vector3 newPos)
+        {
+            base.UpdatePosition(newPos);
+            EnableCoin();
+        }
+
+        private void EnableCoin()
+        {
+            var _coin = transform.Find("coin");
+            if (_coin != null) _coin.gameObject.SetActive(true);
+        }
     }
 }

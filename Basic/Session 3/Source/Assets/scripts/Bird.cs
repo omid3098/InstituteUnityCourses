@@ -1,68 +1,46 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-
-public class Bird : MonoBehaviour
+﻿namespace FlappyBird
 {
-    private readonly float gravity = -0.05f;
-    private float force;
-    private bool clicked;
-    private readonly float forceDuration = 0.5f;
-    private float ellapsedTime;
-    private GameManager mygameManager;
+    using UnityEngine;
+    using System.Collections;
+    using System;
 
-    private bool _stop;
-
-    void Awake()
+    public class Bird : MonoBehaviour
     {
-        clicked = false;
-        ResetValues();
-    }
-
-    public void Init(GameManager _gm)
-    {
-        mygameManager = _gm;
-    }
-
-    private void ResetValues()
-    {
-        force = 10f;
-        ellapsedTime = 0;
-    }
-
-    public void Stop()
-    {
-        _stop = true;
-    }
-
-    void Update()
-    {
-        if (_stop == true) return;
-        if (Input.GetMouseButtonDown(0))
+        private GameManager mygameManager;
+        private Rigidbody _rigidBody;
+        public void Init(GameManager _gm)
         {
-            clicked = true;
-            ResetValues();
+            mygameManager = _gm;
+            _rigidBody = GetComponent<Rigidbody>();
         }
 
-        if (!clicked) transform.position += new Vector3(0, gravity, 0);
-        else
+        void Update()
         {
-            ellapsedTime += Time.deltaTime;
-            if (ellapsedTime >= forceDuration)
+            if (mygameManager._gameOver == true) return;
+            if (Input.GetMouseButtonDown(0))
             {
-                clicked = false;
-                ellapsedTime = 0;
+                _rigidBody.velocity = Vector3.zero;
+                _rigidBody.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
             }
-            transform.position += new Vector3(0, force * Time.deltaTime, 0);
-            force /= 1.1f;
         }
-    }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "obstacle")
+        void OnTriggerEnter(Collider other)
         {
-            mygameManager.GameOver();
+            if (other.tag == "obstacle")
+            {
+                mygameManager.GameOver();
+            }
+            else if (other.tag == "coin")
+            {
+                mygameManager.CollectCoin();
+                other.gameObject.SetActive(false);
+            }
+        }
+
+        public void Stop()
+        {
+            _rigidBody.useGravity = false;
+            _rigidBody.velocity = Vector3.zero;
         }
     }
 }
