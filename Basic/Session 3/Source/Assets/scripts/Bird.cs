@@ -8,15 +8,21 @@
     {
         private GameManager mygameManager;
         private Rigidbody _rigidBody;
+        private Vector3 tmpVelocity;
+
         public void Init(GameManager _gm)
         {
             mygameManager = _gm;
             _rigidBody = GetComponent<Rigidbody>();
+            tmpVelocity = _rigidBody.velocity;
+            StopMove();
+            ResetTransform();
         }
 
         void Update()
         {
-            if (mygameManager._gameOver == true) return;
+            if (mygameManager.gameOver == true) return;
+            if (!_rigidBody.useGravity) return;
             if (Input.GetMouseButtonDown(0))
             {
                 _rigidBody.velocity = Vector3.zero;
@@ -37,9 +43,20 @@
             }
         }
 
-        public void Stop()
+        internal void ResetTransform()
+        {
+            transform.position = Vector3.zero;
+        }
+
+        public void StopMove()
         {
             _rigidBody.useGravity = false;
+            tmpVelocity = _rigidBody.velocity;
+            _rigidBody.velocity = Vector3.zero;
+        }
+        public void StartMove()
+        {
+            _rigidBody.useGravity = true;
             _rigidBody.velocity = Vector3.zero;
         }
     }

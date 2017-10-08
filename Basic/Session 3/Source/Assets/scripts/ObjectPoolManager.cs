@@ -24,13 +24,21 @@
                 tempGo.transform.SetParent(transform, false);
                 obsList.Add(tempGo.GetComponent<MovableObjects>());
             }
+            StopMove();
         }
 
-        public void Stop()
+        public void StopMove()
         {
             foreach (var _object in obsList)
             {
                 _object.Stop();
+            }
+        }
+        public void StartMove()
+        {
+            foreach (var _object in obsList)
+            {
+                _object.StartMove();
             }
         }
 
